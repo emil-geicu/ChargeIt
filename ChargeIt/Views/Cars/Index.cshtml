@@ -1,0 +1,66 @@
+﻿@model List<CarViewModel>
+<link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<h1 class="display-4 mb-4"> Car list</h1>
+<a type="button" class="btn btn-primary add-station-button fa fa-plus" asp-controller="Cars" asp-action="AddCar"></a>
+
+<table id="cars-table" class="table table-dark table-hover text-center zui-table zui-table-rounded">
+  <thead>
+    <tr>
+    
+      <th scope="col">Id</th>
+      <th scope="col">Plate Number</th>
+      <th scope="col">Owner Name</th>
+      <th scope="col">Owner Email</th>
+      <th scope="col">Actions</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+      @foreach(var car in Model)
+        {
+            <tr>
+            <td> @car.Id</td>
+            <td> @car.PlateNumber</td>
+            <td> @car.Owner.Name</td>
+            <td> @car.Owner.Email</td>
+            <td> 
+
+                    <a type="button" 
+                        class="btn btn-primary fa fa-info" 
+                        asp-controller="Cars" 
+                        asp-action="CarDetails" 
+                        asp-route-id="@car.Id"></a>
+
+                     <a type="button" 
+                    class="btn btn-success fa fa-pencil-square" 
+                    asp-controller="Cars" 
+                    asp-action="EditCar" 
+                    asp-route-id="@car.Id"></a>
+                    
+                    <a type="button" 
+                        class="btn btn-danger fa fa-trash" 
+                        asp-controller="Cars" 
+                        asp-action="DeleteCar" 
+                        asp-route-id="@car.Id"></a>
+                    
+                   
+                </td>
+            </tr>
+        }
+
+  </tbody>
+</table>
+
+<script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js">
+</script>
+
+
+<script>
+$(document).ready(function() {
+    
+    $('#cars-table').DataTable();
+} );
+</script>

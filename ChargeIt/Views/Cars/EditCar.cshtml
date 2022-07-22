@@ -1,0 +1,31 @@
+﻿@model CarViewModel
+<h1 class="display-4 mb-4">Edit car</h1>
+
+<form asp-controller="Cars" asp-action="EditExistingCar" method="post">
+    <input type="text" class="form-control" asp-for="Id" hidden>
+
+   <div class="form-group add-margin-form">
+    <label asp-for="PlateNumber" class="form-label"></label>
+    <input type="text" class="form-control form-input" asp-for="PlateNumber">
+     <span asp-validation-for="PlateNumber" class="text-danger"></span>
+  </div>
+
+  <div class="form-group">
+        <label asp-for="OwnerId" class="col-md-2 control-label text-dark"></label>
+        <div class="col-md-12">
+            <select asp-for="OwnerId" asp-items="@(new SelectList(Model.CarOwners, nameof(DropDownViewModel.Id), nameof(DropDownViewModel.Value)))" class="form-control">
+                <option value="">Select a car owner</option>
+            </select>
+            <span asp-validation-for="OwnerId" class="text-danger"></span>
+        </div>
+   </div>
+
+   <div class="d-flex justify-content-center align-items-center">
+      <button type="submit" class="btn btn-success me-2">Edit Car Details</button>
+           
+      <a type="button" class="btn btn-danger" asp-controller="Cars" asp-action="Index">Cancel</a>
+   </div>
+
+   
+  
+</form>

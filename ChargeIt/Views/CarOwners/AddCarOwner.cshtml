@@ -1,0 +1,24 @@
+﻿@model CarOwnersViewModel
+<h1 class="display-4 mb-4"> New car owner </h1>
+<form asp-controller="CarOwners" asp-action="AddNewCarOwner" method="post">
+  <div class="form-group add-margin-form">
+    <label asp-for="Name">Name</label>
+    <input type="text" class="form-control" asp-for="Name"  placeholder="Name">
+    <span asp-validation-for="Name" class="text-danger"></span>
+  </div>
+  
+  <div class="form-group add-margin-form">
+    <label asp-for="Email">Email</label>
+    <input type="text" class="form-control" asp-for="Email"  placeholder="Email">
+    <span asp-validation-for="Email" class="text-danger"></span>
+  </div>
+
+  
+   <div class="d-flex justify-content-center align-items-center">
+      <button type="submit" class="btn btn-success me-2">Add Car Owner</button>
+           
+      <a type="button" class="btn btn-danger" asp-controller="CarOwners" asp-action="Index">Cancel</a>
+   </div>
+  
+  
+</form>

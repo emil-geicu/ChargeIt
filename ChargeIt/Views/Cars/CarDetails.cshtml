@@ -1,0 +1,79 @@
+﻿@model CarBookingsViewModel
+<link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<h1 class="display-4 mb-4">Details for machine with the plate number: @Model.Car.PlateNumber </h1>
+
+<div class="card bg-dark div-center-margins text-light" style="width: 18rem;">
+  <img class="card-img-top" src="https://smartenergy.illinois.edu/wp-content/uploads/2022/03/EV-charging-2.png" alt="Station">
+  <div class="card-body">
+      <h6 class="card-title">Car plate number: @Model.Car.PlateNumber</h6>
+    <div>
+    <label asp-for="Car.Owner.Name"> Name:</label>
+    <span>@Model.Car.Owner.Name</span>
+    </div>
+
+    <div>
+    <label asp-for="Owner.Email"> Email:</label>
+    <span>@Model.Owner.Email</span>
+    </div>
+</div>
+</div>
+
+
+@if(Model.Bookings.Count()!=0)
+{
+ <h3 style="margin-bottom:10px; margin-top:20px">Bookings for this car</h3>
+ <table id="car-details-table" class="table table-dark table-hover text-center zui-table zui-table-rounded">
+  <thead>
+    <tr>
+    
+      <th scope="col">Code</th>
+      <th scope="col">Start Time</th>
+      <th scope="col">End Time</th>
+      <th scope="col">Cancel Booking</th>
+    </tr>
+  </thead>
+  <tbody>
+
+      @foreach(var booking in Model.Bookings)
+        {
+            <tr>
+            <td> @booking.Code</td>
+            <td> @booking.Date.Value.AddHours(booking.IntervalHour.Value)</td>
+            <td> @booking.Date.Value.AddHours(booking.IntervalHour.Value).AddMinutes(59).AddSeconds(59)</td>
+
+                    @if (booking.canCancel == true)
+                    {
+                    <td> 
+                    <a type="button" 
+                    class="btn btn-danger fa fa-trash" 
+                    asp-controller="Bookings" 
+                    asp-action="DeleteBooking" 
+                    asp-route-id="@booking.Id"
+                    asp-route-idToRemove="@Model.Car.Id"
+                    asp-route-path="CarDetails">
+                    
+                    </a>
+                    </td>
+                    }
+                    else
+                    {
+                        <td>Booking Expired</td>
+                    }
+             </tr>
+        }
+
+  </tbody>
+</table>
+}
+
+<script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js">
+</script>
+
+
+<script>
+$(document).ready(function() {
+    
+    $('#car-details-table').DataTable();
+} );

@@ -1,0 +1,136 @@
+﻿@model BookingViewModel
+
+
+<h1 class="display-4 mb-4"> Booking list</h1>
+
+
+<form asp-controller="Bookings" asp-action="AddNewBooking" method="post">
+  <div class="form-group ">
+        <label asp-for="ChargeMachineId" class="col-md-2 control-label text-dark"></label>
+        <div class="col-md-12">
+            <select id="charge-machine-dropdown" onchange="getAvailableIntervals()" asp-for="ChargeMachineId" asp-items="@(new SelectList(Model.ChargeMachines, nameof(DropDownViewModel.Id), nameof(DropDownViewModel.Value)))" class="form-control">
+                <option value="">Select a recharge slot</option>
+            </select>
+            <span asp-validation-for="ChargeMachineId" class="text-danger"></span>
+        </div>
+   </div>
+
+    <div class="form-group">
+        <label asp-for="CarId" class="col-md-2 control-label text-dark"></label>
+        <div class="col-md-12">
+            <select asp-for="CarId" asp-items="@(new SelectList(Model.Cars, nameof(DropDownViewModel.Id), nameof(DropDownViewModel.Value)))" class="form-control">
+                <option value="">Select a car</option>
+            </select>
+            <span asp-validation-for="CarId" class="text-danger"></span>
+        </div>
+   </div>
+
+   <div class="form-group add-margin-form">
+    <label asp-for="Date" class="form-label">Date</label>
+    <input type="date" id="date-dropdown" onchange="getAvailableIntervals()" min="@DateTime.Now.Date.ToString("yyyy-MM-dd")" class="form-control form-input" asp-for="Date" placeholder="Date">
+    <span asp-validation-for="Date" class="text-danger"></span>
+  </div>
+
+   <div class="form-group">
+        <label asp-for="IntervalHour" class="col-md-2 control-label text-dark"></label>
+        <div class="col-md-12">
+            <select id="available-intervals-dropdown" asp-for="IntervalHour" class="form-control">
+                <option value="">Select interval</option>
+            </select>
+            <span asp-validation-for="IntervalHour" class="text-danger"></span>
+        </div>
+   </div>
+
+   <button type="submit" class="btn btn-success" asp-area="" asp-controller="Bookings" asp-action="AddNewBooking" >Save</button>
+   <a type="button" class="btn btn-primary" asp-area="" asp-controller="Bookings" asp-action="Index">Cancel</a>
+   
+  
+</form>
+        <div id="googleMap" style="height:400px;width:100%;"></div>
+
+
+<script type="text/javascript">
+
+    $( document ).ready(function() {
+        getAvailableIntervals();
+    });
+
+    function getAvailableIntervals(){
+        var chargeMachineId = document.getElementById("charge-machine-dropdown").value;
+        var date = document.getElementById("date-dropdown").value;
+
+        if (chargeMachineId === "" || date === "")
+            return;
+
+        $.ajax({
+            url: "/Bookings/GetAvailableIntervals?date=" + date + "&chargeMachineId=" + chargeMachineId,
+            type: 'get',
+            success: function(data) {
+             
+                var availableIntervalsDropdown=document.getElementById("available-intervals-dropdown");;
+                availableIntervalsDropdown.innerHTML = "";
+
+
+                var defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.innerText = "Select an available interval slot";
+                availableIntervalsDropdown.append(defaultOption);
+
+                for (var i = 0; i < data.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = data[i];
+
+             
+                    option.innerText = get24FormattedHour(data[i]) + " - " + get24FormattedHour(data[i] + 1);
+                    availableIntervalsDropdown.appendChild(option);
+                }
+            }
+
+        });
+    }
+    function get24FormattedHour(hour) {
+        return hour < 10 ? "0" + hour + " : 00" :  hour+" : 00" ;
+    }
+</script>
+
+                
+<script type="text/javascript">
+
+    function returnLatitude() {
+
+        var chargeMachineId= document.getElementById("charge-machine-dropdown").value;
+        if (chargeMachineId === "")
+                return;
+        .ajax({
+                url: "/ChargeMachines/ReturnLatitude?id=" + chargeMachineId,
+                type: 'get',
+            success: function(data) { }
+
+            });
+            
+    }
+    function returnLongitude() {
+
+        var chargeMachineId= document.getElementById("charge-machine-dropdown").value;
+        if (chargeMachineId === "")
+                return;
+        .ajax({
+                url: "/ChargeMachines/ReturnLongitude?id=" + chargeMachineId,
+                type: 'get',
+                success: function(data) {)
+
+            });
+            
+    }
+    function myMap() {
+     
+        var latitude = returnLatitude();
+        var longitude = returnLongitude();
+        var myCenter = new google.maps.LatLng(latitude, longitude);
+        var mapProp = { center: myCenter, zoom: 12, scrollwheel: false, draggable: true, mapTypeId: google.maps.MapTypeId.ROADMAP };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        var marker = new google.maps.Marker({ position: myCenter });
+        marker.setMap(map);
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?callback=myMap"> </script>

@@ -1,0 +1,121 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-image:linear-gradient(#beedff,#035cad)
+}
+
+.add-station-button { 
+    margin-bottom: 20px;
+}
+.add-margin-form{
+    margin-bottom:10px;
+}
+.navbar-brand:hover, .nav-item:hover {
+    background-color: green;
+    transition: 0.5s;
+    -moz-border-radius-topleft: 10px;
+    -moz-border-radius-topright: 10px;
+    -moz-border-radius-bottomright: 10px;
+    -moz-border-radius-bottomleft: 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.fomr-label{
+    margin-bottom: 10px;
+
+}
+
+.form-input{
+    padding:10px;
+}
+
+/* Rounded Table */
+.zui-table {
+    border: solid 1px #000000;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+    .zui-table thead th {
+        background-color: white;
+        border: solid 1px #000000;
+        color: white;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .zui-table tbody td {
+        border: none;
+        color: white;
+        padding: 10px;
+        font-family:Arial;
+        
+    }
+
+.zui-table-rounded {
+    border: transparent;
+}
+
+    .zui-table-rounded thead th {
+        background-color: black;
+        font-family: Arial;
+        color: white;
+    }
+
+        .zui-table-rounded thead th:first-child {
+            border-radius: 20px 0 0 0;
+        }
+
+        .zui-table-rounded thead th:last-child {
+            border-radius: 0 20px 0 0;
+        }
+
+    .zui-table-rounded tbody td {
+        border: none;
+        border-top: solid 1px #000000;
+        background-color: #275f61;
+    }
+
+    .zui-table-rounded tbody tr:last-child td:first-child {
+        border-radius: 0 0 0 20px;
+    }
+
+    .zui-table-rounded tbody tr:last-child td:last-child {
+        border-radius: 0 0 20px 0;
+    }
+
+.button-image:before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.myButton:before {
+    background-image: url(https://www.subpng.com/png-q7od2m/);
+}
+
+.div-center-margins{
+    margin-left:auto;
+    margin-right:auto;
+}

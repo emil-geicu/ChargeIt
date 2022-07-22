@@ -1,0 +1,64 @@
+﻿@model List<CarOwnersViewModel>
+<link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<h1 class="display-4 mb-4"> Car Owners list</h1>
+<a type="button" class="btn btn-primary add-station-button fa fa-plus" asp-controller="CarOwners" asp-action="AddCarOwner"></a>
+
+
+<table id="car-owners-table" class="table table-dark table-hover text-center zui-table zui-table-rounded">
+  <thead>
+    <tr>
+    
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+
+      @foreach(var carOwner in Model)
+        {
+            <tr>
+            <td> @carOwner.Id</td>
+            <td> @carOwner.Name</td>
+            <td> @carOwner.Email</td>
+            <td> 
+
+                    <a type="button" 
+                        class="btn btn-primary fa fa-info" 
+                        asp-controller="CarOwners" 
+                        asp-action="CarOwnerDetails" 
+                        asp-route-id="@carOwner.Id"></a>
+
+                     <a type="button" 
+                    class="btn btn-success fa fa-pencil-square" 
+                    asp-controller="CarOwners" 
+                    asp-action="EditCarOwner" 
+                    asp-route-id="@carOwner.Id"></a>
+                    
+                    <a type="button" 
+                        class="btn btn-danger fa fa-trash" 
+                        asp-controller="CarOwners" 
+                        asp-action="DeleteCarOwner" 
+                        asp-route-id="@carOwner.Id"></a>
+                    
+                   
+                </td>
+            </tr>
+        }
+
+  </tbody>
+</table>
+
+<script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js">
+</script>
+
+
+<script>
+$(document).ready(function() {
+    
+    $('#car-owners-table').DataTable();
+} );
+</script>

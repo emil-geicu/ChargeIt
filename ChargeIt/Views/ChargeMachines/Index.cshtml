@@ -1,0 +1,184 @@
+﻿@using Newtonsoft.Json
+@model List<ChargeMachineViewModel>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
+
+<h1 class="display-4 mb-4">Station list</h1>
+
+<div class="justify-content-center">
+<a type="button" class="btn btn-primary add-station-button fa fa-plus" asp-controller="ChargeMachines" asp-action="AddStation"></a>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-secondary add-station-button fa fa-map" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  
+</button>
+</div>
+
+<table id="charge-machines-table" class="table table-dark table-hover text-center zui-table zui-table-rounded">
+  <thead>
+    <tr>
+    
+      <th scope="col">Id</th>
+      <th scope="col">City</th>
+      <th scope="col">Code</th>
+      <th scope="col">Street</th>
+      <th scope="col">Number</th>
+      <th scope="col">Longitude</th>
+      <th scope="col">Latitude</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+
+      @foreach(var chargeMachine in Model)
+        {
+            <tr>
+                <td> @chargeMachine.Id</td>
+                <td> @chargeMachine.City</td>
+                <td> @chargeMachine.Code</td>
+                <td> @chargeMachine.Street</td>
+                <td> @chargeMachine.Number</td>
+                <td> @chargeMachine.Longitude</td>
+                <td> @chargeMachine.Latitude</td>
+                <td> 
+
+                    <a type="button" 
+                        class="btn btn-primary fa fa-info" 
+                        asp-controller="ChargeMachines" 
+                        asp-action="StationDetails" 
+                        asp-route-id="@chargeMachine.Id"></a>
+
+                     <a type="button" 
+                    class="btn btn-success fa fa-pencil-square" 
+                    asp-controller="ChargeMachines" 
+                    asp-action="EditStation" 
+                    asp-route-id="@chargeMachine.Id"></a>
+                    
+                    <a type="button" 
+                        class="btn btn-danger fa fa-trash" 
+                        asp-controller="ChargeMachines" 
+                        asp-action="DeleteStation" 
+                        asp-route-id="@chargeMachine.Id"></a>
+                    
+                   
+                </td>
+            </tr>
+        }
+
+  </tbody>
+</table>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" > 
+  <div class="modal-dialog modal-xl" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Station Map</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="googleMap" style="height:500px;width:100%;"></div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js">
+</script>
+
+
+<script>
+$(document).ready(function() {
+    
+    $('#charge-machines-table').DataTable();
+    getLocation();
+} );
+</script>
+
+<div id="googleMap" style="height:400px;width:100%;"></div>
+
+<script>
+function initMap(position) {
+    var myCenter = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    var mapProp = { center: myCenter, zoom: 12, scrollwheel: false, draggable: true, mapTypeId: google.maps.MapTypeId.ROADMAP };
+    var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+    var data = @Html.Raw(JsonConvert.SerializeObject(this.Model));
+
+    $.each(data, function(i, item) {
+        var marker = new google.maps.Marker({
+            'position': new google.maps.LatLng(item.Latitude, item.Longitude),
+            'map': map,
+            'title': item.Code
+        });
+
+        var infowindow = new google.maps.InfoWindow({    
+        content: "<div><h5>" + item.Code + "</h5>" + 
+        "<p> <b>City: </b>" + item.City + "</p>" +
+        "<p> <b>Street: </b>" + item.Street + "</p>" +
+        "<p> <b>Number: </b>" + item.Number + "</p>" +
+        
+        "</div>"
+        });   
+
+        google.maps.event.addListener(marker, 'click', function () {    
+            infowindow.open(map, marker);    
+        });  
+    });    
+
+      
+}
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(initMap);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+</script>
+
+<script>
+function initMap(position) {
+    var myCenter = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    var mapProp = { center: myCenter, zoom: 12, scrollwheel: false, draggable: true, mapTypeId: google.maps.MapTypeId.ROADMAP };
+    var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+    var data = @Html.Raw(JsonConvert.SerializeObject(this.Model));
+
+    $.each(data, function(i, item) {
+        var marker = new google.maps.Marker({
+            'position': new google.maps.LatLng(item.Latitude, item.Longitude),
+            'map': map,
+            'title': item.Code
+        });
+
+        var infowindow = new google.maps.InfoWindow({    
+        content: "<div><h5>" + item.Code + "</h5>" + 
+        "<p> <b>City: </b>" + item.City + "</p>" +
+        "<p> <b>Street: </b>" + item.Street + "</p>" +
+        "<p> <b>Number: </b>" + item.Number + "</p>" +
+        
+        "</div>"
+        });   
+
+        google.maps.event.addListener(marker, 'click', function () {    
+            infowindow.open(map, marker);    
+        });  
+    });    
+
+      
+}
+    
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(initMap);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+</script> 
+<script src="https://maps.googleapis.com/maps/api/js?callback=myMap"> </script>
